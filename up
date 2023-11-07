@@ -1,0 +1,10 @@
+#!/opt/homebrew/bin/bash
+
+# take care of updating formulae and casks
+brew update
+brew outdated
+brew upgrade
+brew autoremove
+brew cleanup
+echo
+echo "Done!"
