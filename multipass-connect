@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Check if a VM name is provided
+if [ -z "$1" ]; then
+    echo "Usage: $0 <vm-name>"
+    exit 1
+fi
+
+VM_NAME="$1"
+
+# Get the IP address of the specified VM
+VM_IP=$(multipass list | grep "$VM_NAME" | awk '{print $3}')
+
+if [ -z "$VM_IP" ]; then
+    echo "Error: Could not find IP for Multipass VM '$VM_NAME'. Is it running?"
+    exit 1
+fi
+
+# Connect to the VM and forward ports
+echo "Connecting to Multipass VM '$VM_NAME' at $VM_IP and forwarding specified ports..."
+sudo ssh \
+    -i /var/root/Library/Application\ Support/multipassd/ssh-keys/id_rsa \
+    -L 3000:localhost:3000 \
+    -L 5173:localhost:5173 \
+    -L 8000:localhost:8000 \
+    -L 5000:localhost:5000 \
+    -L 8080:localhost:8080 \
+    -L 4000:localhost:4000 \
+    -L 5432:localhost:5432 \
+    -L 3306:localhost:3306 \
+    -L 6379:localhost:6379 \
+    -L 27017:localhost:27017 \
+    -L 9200:localhost:9200 \
+    -L 5601:localhost:5601 \
+    -L 8888:localhost:8888 \
+    ubuntu@$VM_IP
